@@ -2,8 +2,6 @@ exports.createNewTransactions = function(req) {
   req.body.forEach(trans => {
     Transaction.findOne({trans_id: trans.trans_id})
       .then(result => {
-        console.log(result)
-        console.log(trans.trans_id);
         if (result === null) {
           const newTrans = new Transaction({
             trans_id: trans.trans_id,
@@ -16,4 +14,15 @@ exports.createNewTransactions = function(req) {
         }
       })
   })
+}
+
+exports.groupByName = async function(Transaction) {
+  let result = {}
+  await Transaction.find().then(transactions => {
+    transactions.map(transaction => {
+      result[transaction.name] = result[transaction.name] || []
+      result[transaction.name].push(transaction)
+    })
+  })
+  return result
 }
