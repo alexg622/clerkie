@@ -26,3 +26,11 @@ exports.groupByName = async function(Transaction) {
   })
   return result
 }
+
+exports.parseByLength = function (transactions) {
+  let result = Object.assign({}, transactions)
+  Object.keys(transactions).map(transaction => {
+    if (transactions[transaction].length < 3) delete result[transaction]
+  })
+  return result
+}
