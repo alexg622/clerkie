@@ -2,6 +2,8 @@ const axios = require("axios")
 
 let data = [
   {name: "YMCA", date: "2018-08-10T08:00:00.000Z", amount: 69, trans_id: "dslakfjldskafj", user_id: "lskdjfsdlkfj"},
+  {name: "YMCA", date: "2018-08-10T08:00:00.000Z", amount: 68, trans_id: "dslakfj66ldskafj", user_id: "lskdjfsdlkfj"},
+  {name: "YMCA", date: "2018-08-10T08:00:00.000Z", amount: 5, trans_id: "dslakfjl99afj", user_id: "lskdjfsdlkfj"},
   {name: "YMCA", date: "2018-11-10T08:00:00.000Z", amount: 75, trans_id: "dsldsfdsfdssdf", user_id: "lskdjfsdlkfj"},
   {name: "YMCA", date: "2018-12-10T08:00:00.000Z", amount: 75, trans_id: "dsldssdfsdfssdf", user_id: "lskdjfsdlkfj"},
   {name: "Macy's", date: "2018-12-10T08:00:00.000Z", amount: 7100, trans_id: "dsldsyuirfssdf", user_id: "lskdjfsdlkfj"},

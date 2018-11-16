@@ -34,3 +34,31 @@ exports.parseByLength = function (transactions) {
   })
   return result
 }
+
+const getAveragePrice = (transactions) => {
+  let averagePrices = {}
+  Object.keys(transactions).map(transaction => {
+    averagePrices[transaction] = {}
+    let average = 0
+    let counter = 0
+    transactions[transaction].map(values => {
+      counter ++
+      average += values.amount
+    })
+    averagePrices[transaction]["average"] = average/counter
+  })
+  return averagePrices
+}
+
+exports.parseByPrice = (transactions) => {
+  let averagePrices = getAveragePrice(transactions)
+  let result = Object.assign({}, transactions)
+  Object.keys(transactions).map(transaction => {
+    transactions[transaction].map((values, idx) => {
+      if (!(values.amount > (averagePrices[transaction]["average"]-30) && values.amount < (averagePrices[transaction]["average"]+30))) {
+        result[transaction].splice(idx, 1)
+      }
+    })
+  })
+  return result
+}

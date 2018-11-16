@@ -6,7 +6,8 @@ const utils = require("../utils/utils")
 router.get("/transactionsTesting", async (req, res) => {
   let answer = await utils.groupByName(Transaction)
   let newAnswer = await utils.parseByLength(answer)
-  res.json(newAnswer)
+  let pricedAnswer = await utils.parseByPrice(newAnswer)
+  res.json(pricedAnswer)
 })
 
 router.post('/', async (req, res) => {
@@ -14,6 +15,7 @@ router.post('/', async (req, res) => {
   await utils.createNewTransactions(req)
   let tGroupedByName = await utils.groupByName(Transaction)
   let tParsedByLength = await utils.parseByLength(tGroupedByName)
+  let tParsedByPrice = await utils.parseByPrice(tParsedByLength)
 
   res.json(req.body)
 })
