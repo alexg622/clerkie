@@ -2,19 +2,19 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 const RecurringTransactionSchema = new Schema({
-  name {
+  name: {
     type: String,
     required: true
   },
-  user_id {
+  user_id: {
     type: String,
     required: true
   },
-  next_amt {
+  next_amt: {
     type: Number,
     required: true
   },
-  next_date {
+  next_date: {
     type: Date,
     required: true
   },

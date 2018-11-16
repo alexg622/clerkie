@@ -2,23 +2,23 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 const TransactionSchema = new Schema({
-  trans_id {
+  trans_id: {
     type: String,
     required: true
   },
-  user_id {
+  user_id: {
     type: String,
     required: true
   },
-  name {
+  name: {
     type: String,
     required: true
   },
-  amount {
+  amount: {
     type: Number,
     required: true
   },
-  date {
+  date: {
     type: Date,
     required: true
   }
