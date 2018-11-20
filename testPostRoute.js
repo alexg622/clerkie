@@ -11,4 +11,4 @@ let data = [
   {name: "Equinox", date: "2018-12-10T08:00:00.000Z", amount: 7100, trans_id: "dsl1234syui897sdf", user_id: "lskdjfsdlkfj"}
 ]
 
-axios.post("http://localhost:1984/", data)
+axios.post("http://localhost:1984/", data).then(newData => console.log(newData.data))

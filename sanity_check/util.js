@@ -83,7 +83,7 @@ module.exports.testEquality = function(testName, response, transArr, onlyTestUni
         console.log(`Expected : ${JSON.stringify(expectedRes)}`);
         console.log(`Testing for recurring array length...`);
         assert(actualResArr.length === expectedRes.length, "Actual result doesn't have same number of elements as expected result");
-        
+
         expectedRes.forEach(expectedElem => {
             let actualElemIndex = us.findIndex(actualResArr, elem => elem.name === expectedElem.name); // Get the expected element that matches
             if (actualElemIndex === -1) {
@@ -93,7 +93,7 @@ module.exports.testEquality = function(testName, response, transArr, onlyTestUni
                 checkRecElem(actualElem, expectedElem);
             }
         });
- 
+
         console.log(`--------------------------- PASSED ${testName} ---------------------------`);
     } catch (err) {
         console.log(`Encountered following error in testEquality: ${err.stack}`)
@@ -144,7 +144,7 @@ function getTransIdPrefix(transId) {
 function checkRecElem(actualElem, expectedElem) {
     console.log(`Running checkRecElem...`);
     let result = false;
-    
+
     console.log(`Testing for next_date...`);
     let lowerDateLimit = new Date(expectedElem.next_date);
     lowerDateLimit.setDate(lowerDateLimit.getDate() - DATE_BUFFER);
@@ -157,7 +157,7 @@ function checkRecElem(actualElem, expectedElem) {
         console.log("NEXT DATE TEST: X".red);
         result = err;
     }
-    
+
     console.log(`Testing for next_amount...`);
     let lowerAmtLimit = expectedElem.next_amt * (1 - AMOUNT_BUFFER);
     let upperAmtLimit = expectedElem.next_amt * (1 + AMOUNT_BUFFER);
@@ -168,7 +168,7 @@ function checkRecElem(actualElem, expectedElem) {
         console.log("NEXT AMOUNT TEST: X".red);
         result = err;
     }
-    
+
     console.log(`Testing for transactions...`);
     if (actualElem.transactions) sortTransArr(actualElem.transactions); // Make sure the transaction arrays are consistent for the equality check
     if (expectedElem.transactions) sortTransArr(expectedElem.transactions);

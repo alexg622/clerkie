@@ -3,28 +3,27 @@ const router = express.Router()
 const Transaction = require("../models/Transaction")
 const utils = require("../utils/utils")
 
-router.get("/transactionsTesting", async (req, res) => {
-  let answer = await utils.groupByName(Transaction)
-  let newAnswer = await utils.parseByLength(answer)
-  let pricedAnswer = await utils.parseByPrice(newAnswer)
-  res.json(pricedAnswer)
+router.get("/", async (req, res) => {
+  // utils.deleteTrans(Transaction)
+  utils.sessionTimeout(res) // timesout session after 10 seconds with 504 status code
+  let tGroupedByName = await utils.groupByName(Transaction) // Groups transactions by name
+  let tParsedByLength = await utils.parseByLength(tGroupedByName) // makes sure to be recurring transactions by that name have at least three in histroy
+  let tParsedByPrice = await utils.parseByPrice(tParsedByLength) // returns transactions in that name category that are within $30 of average price of all transactions in that name category
+  let mostRecent = await utils.getMostRecent(tParsedByPrice) // returns most recent transaction and all recurring
+  return res.json(mostRecent)
 })
 
 router.post('/', async (req, res) => {
-  let RecurTrans = []
-  await utils.createNewTransactions(req)
-  let tGroupedByName = await utils.groupByName(Transaction)
-  let tParsedByLength = await utils.parseByLength(tGroupedByName)
-  let tParsedByPrice = await utils.parseByPrice(tParsedByLength)
-
-  res.json(req.body)
+  let userId = req.body[0].user_id
+  utils.sessionTimeout(res) // timesout session after 10 seconds with 504 status code
+  await utils.createNewTransactions(req) // creates new transactions
+  let tGroupedByName = await utils.groupByNameAndUserId(Transaction, userId) // groups transactions by name and userId
+  let tParsedByLength = await utils.parseByLength(tGroupedByName) // makes sure to be recurring there has to be at least three transactions
+  let tParsedByPrice = await utils.parseByPrice(tParsedByLength) // makes sure recurring transactions are within $30 or average price of all recurring transactions by that name
+  let recurringTrans = await utils.getMostRecent(tParsedByPrice) // gets most recent transaction and formats output to satisfy tests
+  if (recurringTrans[0] !== undefined) {
+    return res.json(recurringTrans) // returns output as long as it is not undefined
+  }
 })
 
 module.exports = router
-
-
-
-// find all transactions with same name
-// in those find ones that have a length greater than 3
-// in all transactions that have the same name find similar pricing
-// in transactions with same name find consistant dates
