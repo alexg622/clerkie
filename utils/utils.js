@@ -31,6 +31,7 @@ exports.groupByName = async function(Transaction) {
   return result
 }
 
+// groups all transactions by userId and then name
 exports.groupByNameAndUserId = async function(Transaction, user_id) {
   let result = {}
   await Transaction.find({user_id}).then(transactions => {
@@ -52,7 +53,7 @@ exports.parseByLength = async function (transactions) {
   return result
 }
 
-// Gets the average price from all transactions of a certian name
+// Gets the average price from all transactions of a certain name
 const getAveragePrice = async function (transactions) {
   let averagePrices = {}
   Object.keys(transactions).map(transaction => {
@@ -82,7 +83,7 @@ exports.parseByPrice = async function (transactions) {
   return result
 }
 
-// gets the most recent transaction
+// gets the most recent transaction and returns the recurring transactions in the format to satisfy the tests
 exports.getMostRecent = async function (transactions) {
   let mostRecentArr = []
   let arr = []
@@ -114,9 +115,27 @@ exports.deleteTrans = async function (Transaction) {
   })
 }
 
+// sorts words alphabetically
+exports.mySort = function (recurringTrans) {
+  counter = true
+  while (counter) {
+    counter = false
+    for(let i=0; i<recurringTrans.length-1; i++) {
+      if (recurringTrans[i].name > recurringTrans[i+1].name){
+        let prev = recurringTrans[i]
+        let next = recurringTrans[i+1]
+        recurringTrans[i] = next
+        recurringTrans[i+1] = prev
+        counter = true
+      }
+    }
+  }
+  return recurringTrans
+}
+
 // sends status 504 and timeout error message after 10 seconds
 exports.sessionTimeout = (res) => {
   setTimeout(() => {
-    return res.status(504).json({err: "Your session timedout"})
+    return res.status(504).json({err: "Your session timed out"})
   }, 100000)
 }
