@@ -7,17 +7,17 @@ When transactions are sent to the root route the application will perform the fo
 * Find the average price for all transactions of a certain name, and weed out the ones that are not within $30 of the average price.
 * Find the most recent transaction and format everything to satisfy the tests as well as alphabetize them.
 
-##Tests
+## Tests
 ![](https://github.com/alexg622/clerkie/blob/master/images/Screen%20Shot%202018-11-20%20at%203.45.01%20PM.png?raw=true)
 
 
-##Utils
+## Utils
 ![](https://github.com/alexg622/clerkie/blob/master/images/Screen%20Shot%202018-11-20%20at%203.45.30%20PM.png?raw=true)
 
 
-##Transaction Schema
+## Transaction Schema
 ![](https://github.com/alexg622/clerkie/blob/master/images/Screen%20Shot%202018-11-20%20at%203.45.48%20PM.png?raw=true)
 
 
-##Transaction Routes
+## Transaction Routes
 ![](https://github.com/alexg622/clerkie/blob/master/images/Screen%20Shot%202018-11-20%20at%203.46.13%20PM.png?raw=true)
