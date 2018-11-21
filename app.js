@@ -3,9 +3,9 @@ const app = express()
 const bodyParser = require("body-parser")
 const mongoose = require('mongoose')
 const transactionRoutes = require("./routes/transactionRoutes")
-const url = "mongodb://localhost:27017/interview_challenge"
+const url = "mongodb://localhost:27017/interview_challenge" // set mongoDB to 27017
 
-// user bodyParser for json
+// use bodyParser for json
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
