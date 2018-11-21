@@ -45,7 +45,7 @@ exports.groupByNameAndUserId = async function(Transaction, user_id) {
 }
 
 // Makes sure that to be a recurring transaction there has to be at least three transactions from that company's name
-exports.parseByLength = async function (transactions) {
+exports.parseByLength = function (transactions) {
   let result = Object.assign({}, transactions)
   Object.keys(transactions).map(transaction => {
     if (transactions[transaction].length < 3) delete result[transaction]
@@ -54,7 +54,7 @@ exports.parseByLength = async function (transactions) {
 }
 
 // Gets the average price from all transactions of a certain name
-const getAveragePrice = async function (transactions) {
+const getAveragePrice = function (transactions) {
   let averagePrices = {}
   Object.keys(transactions).map(transaction => {
     averagePrices[transaction] = {}
@@ -84,7 +84,7 @@ exports.parseByPrice = async function (transactions) {
 }
 
 // gets the most recent transaction and returns the recurring transactions in the format to satisfy the tests
-exports.getMostRecent = async function (transactions) {
+exports.getMostRecent = function (transactions) {
   let mostRecentArr = []
   let arr = []
   let keys = Object.keys(transactions).map(transaction => transaction)
@@ -134,7 +134,7 @@ exports.sessionTimeout = (res) => {
 }
 
 // deteles all transactions
-exports.deleteTrans = async function (Transaction) {
+exports.deleteTrans = function (Transaction) {
   Transaction.find().then(trans => {
     trans.map(tran => tran.remove())
   })
