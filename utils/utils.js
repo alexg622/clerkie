@@ -23,7 +23,7 @@ exports.groupByName = async function(Transaction) {
   let result = {}
   await Transaction.find().then(transactions => {
     transactions.map(transaction => {
-      let name = transaction.name.split(" ")[0]
+      let name = transaction.name.split(" ")[0] //gets first word of name in case it has a transaction id after it
       result[name] = result[name] || []
       result[name].push(transaction)
     })
@@ -36,7 +36,7 @@ exports.groupByNameAndUserId = async function(Transaction, user_id) {
   let result = {}
   await Transaction.find({user_id}).then(transactions => {
     transactions.map(transaction => {
-      let name = transaction.name.split(" ")[0]
+      let name = transaction.name.split(" ")[0] //gets first word of name in case it has a transaction id after it 
       result[name] = result[name] || []
       result[name].push(transaction)
     })
