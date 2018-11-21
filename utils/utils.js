@@ -36,7 +36,7 @@ exports.groupByNameAndUserId = async function(Transaction, user_id) {
   let result = {}
   await Transaction.find({user_id}).then(transactions => {
     transactions.map(transaction => {
-      let name = transaction.name.split(" ")[0] //gets first word of name in case it has a transaction id after it 
+      let name = transaction.name.split(" ")[0] //gets first word of name in case it has a transaction id after it
       result[name] = result[name] || []
       result[name].push(transaction)
     })
@@ -95,12 +95,12 @@ exports.getMostRecent = async function (transactions) {
         let oldDate = new Date(transactions[key][i].date)
         let theDate = new Date(transactions[key][i].date)
         theDate.setMonth(oldDate.getMonth() + 1)
-        mostRecent = {name: transactions[key][i].name, user_id: transactions[key][i].user_id, next_amt: transactions[key][i].amount, next_date: theDate, transactions: transactions[key]}
+        mostRecent = {name: transactions[key][i].name, user_id: transactions[key][i].user_id, next_date: theDate, next_amt: transactions[key][i].amount, transactions: transactions[key]}
       } else {
         let oldDate = new Date(transactions[key][i+1].date)
          let theDate = new Date(transactions[key][i+1].date)
         theDate.setMonth(oldDate.getMonth() + 1)
-        mostRecent = {name: transactions[key][i+1].name, user_id: transactions[key][i+1].user_id, next_amt: transactions[key][i+1].amount, next_date: theDate, transactions: transactions[key]}
+        mostRecent = {name: transactions[key][i+1].name, user_id: transactions[key][i+1].user_id, next_date: theDate, next_amt: transactions[key][i+1].amount, transactions: transactions[key]}
       }
     }
     mostRecentArr.push(mostRecent)
