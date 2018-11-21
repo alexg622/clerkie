@@ -2,17 +2,20 @@ const express = require('express')
 const app = express()
 const bodyParser = require("body-parser")
 const mongoose = require('mongoose')
-// const db = require('./.git/keys').mongoURI
 const transactionRoutes = require("./routes/transactionRoutes")
-const url = "mongodb://localhost:27017/interview_challenge";
+const url = "mongodb://localhost:27017/interview_challenge"
 
+// user bodyParser for json
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
+// connect to mongoDB
 mongoose.connect(url).then(() => console.log("mongoDB is connected")).catch(err => console.log(err))
 mongoose.Promise = global.Promise
 
+// make '/' transactionRoutes
 app.use('/', transactionRoutes)
 
+// set and listen for port 1984
 const port = 1984
 app.listen(port, () => console.log(`Server running on port ${port}`))

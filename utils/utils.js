@@ -108,13 +108,6 @@ exports.getMostRecent = async function (transactions) {
   return mostRecentArr
 }
 
-// deteles all transactions
-exports.deleteTrans = async function (Transaction) {
-  Transaction.find().then(trans => {
-    trans.map(tran => tran.remove())
-  })
-}
-
 // sorts words alphabetically
 exports.mySort = function (recurringTrans) {
   counter = true
@@ -138,4 +131,11 @@ exports.sessionTimeout = (res) => {
   setTimeout(() => {
     return res.status(504).json({err: "Your session timed out"})
   }, 100000)
+}
+
+// deteles all transactions
+exports.deleteTrans = async function (Transaction) {
+  Transaction.find().then(trans => {
+    trans.map(tran => tran.remove())
+  })
 }
