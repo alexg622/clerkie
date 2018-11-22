@@ -139,3 +139,86 @@ exports.deleteTrans = function (Transaction) {
     trans.map(tran => tran.remove())
   })
 }
+
+// revisions below
+// ________________________________________________________________________________
+
+// sorts transactions by date
+exports.sortByDate = function(data) {
+  let keys = Object.keys(data)
+  keys.map(key => {
+    let counter = true
+    while(counter) {
+      counter = false
+      for(let i=0; i<data[key].length-1; i++){
+        let firstDate = new Date(data[key][i].date)
+        let secondDate = new Date(data[key][i+1].date)
+        if (firstDate > secondDate) {
+          let prev = data[key][i]
+          let next = data[key][i+1]
+          data[key][i] = next
+          data[key][i+1] = prev
+          counter = true
+        }
+      }
+    }
+  })
+  return data
+}
+
+// gets recurring transactions. Weeds out ones that are in the same week, are not within a price of $10, and aren't within 1 day from eachother
+exports.getRecurrs = function(data) {
+  let keys = Object.keys(data)
+  let sortedByDates = exports.sortByDate(data) // sorts transactions by date
+  keys.map(key => {
+    let idxsToRemove = []
+    sortedByDates[key].map((values, idx) => {
+      let remove = true // removes if prices are too far apart
+      let secondRemove = false // removes if dates are too close
+      for(let i=0; i<sortedByDates[key].length; i++) {
+        if (i !== idx) {
+          let dateOne = new Date(values.date)
+          let dateTwo = new Date(sortedByDates[key][i].date)
+          let priceOne = values.amount
+          let priceTwo = sortedByDates[key][i].amount
+          let priceDiff = priceTwo - priceOne
+          let difference = dateTwo.getDate() - dateOne.getDate()
+          if (dateOne.getYear() === dateTwo.getYear() && dateOne.getMonth() === dateTwo.getMonth() && difference < 6) secondRemove = true // checks to see if are within six days of eachother
+          if (!(dateOne.getYear() === dateTwo.getYear() && dateOne.getMonth() === dateTwo.getMonth() && difference < 6)) {
+            if (difference <= 1 && (priceDiff < 10 && priceDiff > -10)) { // checks that price is not more that $10 difference
+              remove = false
+            }
+          }
+        }
+
+      }
+      // pushes idxs to delete into an array
+      if (secondRemove === true && remove === false) idxsToRemove.push(idx)
+      if (remove === true && secondRemove === false) idxsToRemove.push(idx)
+      if (remove && secondRemove) idxsToRemove.push(idx)
+    })
+    // deletes all bad indexs by iterating over the indexs to delete array in reverse and removing the transaction
+    for (let i=idxsToRemove.length-1; i>=0; i--) {
+      sortedByDates[key].splice(idxsToRemove[i], 1)
+    }
+  })
+  return sortedByDates
+}
+
+// gets the most recent transaction and formats output to satisfy tests. each group of transactions is sorted by date ascending
+exports.newGetMostRecent = function (transactions) {
+  let mostRecentArr = []
+  let keys = Object.keys(transactions)
+  keys.map(key => {
+    let data = {}
+    let idx = transactions[key].length-1
+    data["name"] = transactions[key][idx].name
+    data["user_id"] = transactions[key][idx].user_id
+    data["next_amt"] = transactions[key][idx].amount
+    // minuses the very last transaction date from the second to last one's date and then adds the result to the last transaction to get the next date
+    data["next_date"] = new Date((new Date(transactions[key][idx].date).getTime() - new Date(transactions[key][idx-1].date).getTime()) + new Date(transactions[key][idx].date).getTime())
+    data["transactions"] = transactions[key]
+    mostRecentArr.push(data)
+  })
+  return mostRecentArr
+}

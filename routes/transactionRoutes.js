@@ -13,18 +13,36 @@ router.get("/", async (req, res) => {
   return res.json(mostRecent)
 })
 
-// post route takes all transactions, adds them to the database and returns recurring transactions for that user
+// Revised post route
 router.post('/', async (req, res) => {
   let userId = req.body[0].user_id // get userId for line 21 function's groupByNameAndUserId
   utils.sessionTimeout(res) // timesout session after 10 seconds with 504 status code
   await utils.createNewTransactions(req) // creates new transactions if not already in database
   let tGroupedByName = await utils.groupByNameAndUserId(Transaction, userId) // groups transactions by name and userId
   let tParsedByLength = await utils.parseByLength(tGroupedByName) // makes sure to be recurring there has to be at least three transactions in history
-  let tParsedByPrice = await utils.parseByPrice(tParsedByLength) // makes sure recurring transactions are within $30 or average price of all recurring transactions by that name
-  let recurringTrans = await utils.getMostRecent(tParsedByPrice) // gets most recent transaction and formats output to satisfy tests
-  if (recurringTrans[0] !== undefined) {
-    return res.json(utils.mySort(recurringTrans)) // returns output as long as it is not undefined
+  let tRecurrTrans = await utils.getRecurrs(tParsedByLength) // makes sure recurring transactions are within $10 of eachother, the date is more than six days apart, and the rucurring day of the month is the same or off by 1
+  let tRecurrFormatted = await utils.newGetMostRecent(tRecurrTrans) // gets most recent transaction and formats output to satisfy tests
+  if (tRecurrFormatted[0] !== undefined) {
+    return res.json(utils.mySort(tRecurrFormatted)) // returns output as long as it is not undefined
   }
 })
+
+
+// ________________________________________________________________________________
+// first post route
+// // post route takes all transactions, adds them to the database and returns recurring transactions for that user
+// router.post('/', async (req, res) => {
+//   let userId = req.body[0].user_id // get userId for line 21 function's groupByNameAndUserId
+//   utils.sessionTimeout(res) // timesout session after 10 seconds with 504 status code
+//   await utils.createNewTransactions(req) // creates new transactions if not already in database
+//   let tGroupedByName = await utils.groupByNameAndUserId(Transaction, userId) // groups transactions by name and userId
+//   let tParsedByLength = await utils.parseByLength(tGroupedByName) // makes sure to be recurring there has to be at least three transactions in history
+//   let tParsedByPrice = await utils.parseByPrice(tParsedByLength) // makes sure recurring transactions are within $30 or average price of all recurring transactions by that name
+//   let recurringTrans = await utils.getMostRecent(tParsedByPrice) // gets most recent transaction and formats output to satisfy tests
+//   if (recurringTrans[0] !== undefined) {
+//     return res.json(utils.mySort(recurringTrans)) // returns output as long as it is not undefined
+//   }
+// })
+
 
 module.exports = router

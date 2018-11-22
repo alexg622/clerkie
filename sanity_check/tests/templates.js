@@ -21,7 +21,7 @@ module.exports.testMonthlyRec = async function(userId, companyName, suffixType="
         transArr.push(testUtil.createTrans(transPrefix, userId, companyName, transAmt, date, true));
         date.setMonth(date.getMonth() - 1);
     }
-    
+
     await runTest(`MONTHLY RECURRING ${suffixType}`, transArr);
 }
 
