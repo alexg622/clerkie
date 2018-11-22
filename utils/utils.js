@@ -126,13 +126,6 @@ exports.mySort = function (recurringTrans) {
   return recurringTrans
 }
 
-// sends status 504 and timeout error message after 10 seconds
-exports.sessionTimeout = (res) => {
-  setTimeout(() => {
-    return res.status(504).json({err: "Your session timed out"})
-  }, 100000)
-}
-
 // deteles all transactions
 exports.deleteTrans = function (Transaction) {
   Transaction.find().then(trans => {
