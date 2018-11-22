@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
   let timerGet = setTimeout(() => {
       return res.status(504).json({err: "Your session timed out"})
     }, 10000)
-
+    
   let tGroupedByName = await utils.groupByName(Transaction) // groups transactions by name
   let tParsedByLength = await utils.parseByLength(tGroupedByName) // makes sure to be recurring transactions by that name have at least three in histroy
   let tParsedByPrice = await utils.parseByPrice(tParsedByLength) // returns transactions in that name category that are within $30 of average price of all transactions in that name category
