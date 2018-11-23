@@ -201,17 +201,23 @@ exports.getRecurrs = function(data) {
 // gets the most recent transaction and formats output to satisfy tests. each group of transactions is sorted by date ascending
 exports.newGetMostRecent = function (transactions) {
   let mostRecentArr = []
-  let keys = Object.keys(transactions)
-  keys.map(key => {
-    let data = {}
-    let idx = transactions[key].length-1
-    data["name"] = transactions[key][idx].name
-    data["user_id"] = transactions[key][idx].user_id
-    data["next_amt"] = transactions[key][idx].amount
-    // minuses the very last transaction date from the second to last one's date and then adds the result to the last transaction to get the next date
-    data["next_date"] = new Date((new Date(transactions[key][idx].date).getTime() - new Date(transactions[key][idx-1].date).getTime()) + new Date(transactions[key][idx].date).getTime())
-    data["transactions"] = transactions[key]
-    mostRecentArr.push(data)
-  })
+  let keys = Object.keys(transactions).map(transaction => transaction)
+  if (keys.length > 0) {
+    keys.forEach(key => {
+      let data = {}
+      try {
+        let idx = transactions[key].length-1
+        data["name"] = transactions[key][idx].name
+        data["user_id"] = transactions[key][idx].user_id
+        data["next_amt"] = transactions[key][idx].amount
+        // minuses the very last transaction date from the second to last one's date and then adds the result to the last transaction to get the next date
+        data["next_date"] = new Date((new Date(transactions[key][idx].date).getTime() - new Date(transactions[key][idx-1].date).getTime()) + new Date(transactions[key][idx].date).getTime())
+        data["transactions"] = transactions[key]
+        mostRecentArr.push(data)
+      } catch(err) {
+        console.log(err)
+      }
+    })
+  }
   return mostRecentArr
 }
