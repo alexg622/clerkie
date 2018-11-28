@@ -175,15 +175,19 @@ exports.getRecurrs = function(data) {
           let priceOne = values.amount
           let priceTwo = sortedByDates[key][i].amount
           let priceDiff = priceTwo - priceOne
+          let pricePercentage = Math.abs(priceDiff)/priceOne // checks that price is within 20% of each other
           let difference = dateTwo.getDate() - dateOne.getDate()
-          if (dateOne.getYear() === dateTwo.getYear() && dateOne.getMonth() === dateTwo.getMonth() && difference < 6) secondRemove = true // checks to see if are within six days of eachother
+          if (dateOne.getYear() === dateTwo.getYear() && dateOne.getMonth() === dateTwo.getMonth() && difference < 6) secondRemove = true // checks to see if are within six days of each other
           if (!(dateOne.getYear() === dateTwo.getYear() && dateOne.getMonth() === dateTwo.getMonth() && difference < 6)) {
-            if (difference <= 1 && (priceDiff < 10 && priceDiff > -10)) { // checks that price is not more that $10 difference
+            if (difference <= 1 && (pricePercentage <= .2)) { // checks that prices are within 20% of each other
+              remove = false
+            }
+          } else if (dateOne.getYear() === dateTwo.getYear() && dateOne.getMonth() === dateTwo.getMonth()  && dateOne.getDay() === dateTwo.getDay()) { // checks for weekly or bi-weekly transactions
+            if (pricePercentage <= .2) {
               remove = false
             }
           }
         }
-
       }
       // pushes idxs to delete into an array
       if (secondRemove === true && remove === false) idxsToRemove.push(idx)
@@ -206,14 +210,16 @@ exports.newGetMostRecent = function (transactions) {
     keys.forEach(key => {
       let data = {}
       try {
-        let idx = transactions[key].length-1
-        data["name"] = transactions[key][idx].name
-        data["user_id"] = transactions[key][idx].user_id
-        data["next_amt"] = transactions[key][idx].amount
-        // minuses the very last transaction date from the second to last one's date and then adds the result to the last transaction to get the next date
-        data["next_date"] = new Date((new Date(transactions[key][idx].date).getTime() - new Date(transactions[key][idx-1].date).getTime()) + new Date(transactions[key][idx].date).getTime())
-        data["transactions"] = transactions[key]
-        mostRecentArr.push(data)
+        if (transactions[key].length > 0) {
+          let idx = transactions[key].length-1
+          data["name"] = transactions[key][idx].name
+          data["user_id"] = transactions[key][idx].user_id
+          data["next_amt"] = transactions[key][idx].amount
+          // minuses the very last transaction date from the second to last one's date and then adds the result to the last transaction to get the next date
+          data["next_date"] = new Date((new Date(transactions[key][idx].date).getTime() - new Date(transactions[key][idx-1].date).getTime()) + new Date(transactions[key][idx].date).getTime())
+          data["transactions"] = transactions[key]
+          mostRecentArr.push(data)
+        }
       } catch(err) {
         console.log(err)
       }
